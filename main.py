@@ -5,7 +5,6 @@ import pyspark
 from pyspark.sql import SparkSession
 from pyspark.sql import Row
 
-
 spark = SparkSession.builder.getOrCreate()
 
 Orders = pandas.read_csv('/Users/carstenjuliansavage/Desktop/R Working Directory/r-sql-demo-files/orders.csv')
@@ -28,4 +27,4 @@ Employee_Cost_Rank = spark.sql("SELECT *, DENSE_RANK() OVER (ORDER BY item_cost 
 
 Employee_Cost_Rank.createOrReplaceTempView("Employee_Cost_Rank")
 
-Employee_Cost_Rank = Employee_Cost_Rank.toPandas()
+Employee_Cost_Final = Employee_Cost_Rank.toPandas()
