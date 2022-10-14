@@ -39,3 +39,8 @@ Employee_Cost_Final = Employee_Cost_Rank.toPandas()
 spark.sql("SELECT *, RANK() OVER (PARTITION BY firstname ORDER BY item_cost desc) AS Cost_RANK "
           "FROM EmployeeOrdersInner_Spark "
           "ORDER BY firstname, item_cost desc").show()
+
+# Running Total
+spark.sql("SELECT *, SUM(item_cost) OVER (ORDER BY id, item, quantity_ordered asc) AS Running_Total "
+          "FROM EmployeeOrdersInner_Spark "
+          "ORDER BY Running_Total, item_cost asc").show()
