@@ -25,6 +25,8 @@ from pyspark.sql import Row
 #   gender string
 #   );
 
+#   After the tables have been created, upload corresponding files into the tables to load the data.
+
 # Create a Spark session
 spark = SparkSession.builder.getOrCreate()
 
