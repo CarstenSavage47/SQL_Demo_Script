@@ -4,6 +4,7 @@ import pandas
 import pyspark
 from pyspark.sql import SparkSession
 from pyspark.sql import Row
+import openpyxl
 
 #   Simulated Snowflake Implementation
 
@@ -71,3 +72,22 @@ spark.sql("SELECT *, RANK() OVER (PARTITION BY firstname ORDER BY item_cost desc
 spark.sql("SELECT *, SUM(item_cost) OVER (ORDER BY id, item, quantity_ordered asc) AS Running_Total "
           "FROM EmployeeOrdersInner_Spark "
           "ORDER BY Running_Total, item_cost asc").show()
+
+Telco = pandas.read_excel('/Users/carstenjuliansavage/Desktop/R Working Directory/Useful Datasets/Telco_customer_churn.xlsx')
+
+Telco = Telco.filter(['CustomerID'])
+
+Telco_Spark = spark.createDataFrame(Telco)
+Telco_Spark.show()
+
+# Create referenceable tables
+Telco_Spark.createOrReplaceTempView("Telco_Spark")
+
+spark.sql("SELECT LEFT(CustomerID, PATINDEX('%[^0-9]%', CustomerID + 't') - 1) "
+"FROM ( "
+"    SELECT CustomerID = SUBSTRING(CustomerID, pos, LEN(CustomerID)) "
+"    FROM ( "
+"        SELECT CustomerID, pos = PATINDEX('%[0-9]%', CustomerID) "
+"        FROM Telco_Spark " 
+"    ) d "
+") t").show()
