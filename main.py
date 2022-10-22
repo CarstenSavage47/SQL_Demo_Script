@@ -83,11 +83,5 @@ Telco_Spark.show()
 # Create referenceable tables
 Telco_Spark.createOrReplaceTempView("Telco_Spark")
 
-spark.sql("SELECT LEFT(CustomerID, PATINDEX('%[^0-9]%', CustomerID + 't') - 1) "
-"FROM ( "
-"    SELECT CustomerID = SUBSTRING(CustomerID, pos, LEN(CustomerID)) "
-"    FROM ( "
-"        SELECT CustomerID, pos = PATINDEX('%[0-9]%', CustomerID) "
-"        FROM Telco_Spark " 
-"    ) d "
-") t").show()
+spark.sql("SELECT *, SUBSTRING(CustomerID,1,4) AS ID_NUMBER "
+          "FROM Telco_Spark").show()
