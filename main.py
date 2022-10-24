@@ -104,8 +104,7 @@ spark.sql("SELECT CustomerID AS CUST_ID, CASE "
           "END CUST_CATEGORY "
           " FROM Telco_Spark").show()
 
-# Inner and outer queries, case when, inner join with another DF
-
+# Inner and outer queries, case when, inner join with another table
 spark.sql("SELECT * FROM (SELECT CustomerID AS CUST_ID, "
           "CASE "
             "WHEN CustomerID LIKE '1%' THEN 'Ones' "
