@@ -84,5 +84,7 @@ Telco_Spark.show()
 Telco_Spark.createOrReplaceTempView("Telco_Spark")
 
 # Substring example
-spark.sql("SELECT *, SUBSTRING(CustomerID,1,4) AS ID_NUMBER "
-          "FROM Telco_Spark").show()
+spark.sql("SELECT * FROM (SELECT *, SUBSTRING(CustomerID,1,4) AS ID_NUMBER "
+          "FROM Telco_Spark) d "
+          "WHERE ID_NUMBER = 3668 OR ID_NUMBER = 9305 ").show()
+
