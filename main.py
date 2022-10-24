@@ -92,6 +92,14 @@ spark.sql("SELECT CustomerID AS CUST_ID, CASE "
           "WHEN CustomerID LIKE '1%' THEN 'Ones' "
           "WHEN CustomerID LIKE '5%' THEN 'Fives' "
           "WHEN CustomerID LIKE '9%' THEN 'Nines' "
-          "ELSE 'Uncategorized'"
-          "END CUSTOMER_CATEGORY"
+          "ELSE 'Uncategorized' "
+          "END CUST_CATEGORY "
           " FROM Telco_Spark").show()
+
+spark.sql("SELECT * FROM (SELECT CustomerID AS CUST_ID, CASE "
+          "WHEN CustomerID LIKE '1%' THEN 'Ones' "
+          "WHEN CustomerID LIKE '5%' THEN 'Fives' "
+          "WHEN CustomerID LIKE '9%' THEN 'Nines' "
+          "ELSE 'Uncategorized' "
+          "END CUST_CATEGORY "
+          " FROM Telco_Spark) a WHERE CUST_CATEGORY NOT LIKE 'Uncategorized'").show()
