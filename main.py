@@ -88,3 +88,10 @@ spark.sql("SELECT * FROM (SELECT *, SUBSTRING(CustomerID,1,4) AS ID_NUMBER "
           "FROM Telco_Spark) d "
           "WHERE ID_NUMBER = 3668 OR ID_NUMBER = 9305 ").show()
 
+spark.sql("SELECT CustomerID AS CUST_ID, CASE "
+          "WHEN CustomerID LIKE '1%' THEN 'Ones' "
+          "WHEN CustomerID LIKE '5%' THEN 'Fives' "
+          "WHEN CustomerID LIKE '9%' THEN 'Nines' "
+          "ELSE 'Uncategorized'"
+          "END CUSTOMER_CATEGORY"
+          " FROM Telco_Spark").show()
