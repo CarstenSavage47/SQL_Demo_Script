@@ -75,13 +75,21 @@ spark.sql("SELECT *, SUM(item_cost) OVER (ORDER BY id, item, quantity_ordered as
 
 Telco = pandas.read_excel('/Users/carstenjuliansavage/Desktop/R Working Directory/Useful Datasets/Telco_customer_churn.xlsx')
 
+DF_B = pandas.read_excel('/Users/carstenjuliansavage/PycharmProjects/SQL_DEMO_Scripts/DF_B.xlsx')
+
 Telco = Telco.filter(['CustomerID'])
 
 Telco_Spark = spark.createDataFrame(Telco)
 Telco_Spark.show()
 
+DF_B_Spark = spark.createDataFrame(DF_B)
+DF_B_Spark.show()
+
 # Create referenceable tables
 Telco_Spark.createOrReplaceTempView("Telco_Spark")
+
+# Create referenceable tables
+DF_B_Spark.createOrReplaceTempView("DF_B_Spark")
 
 # Substring example
 spark.sql("SELECT * FROM (SELECT *, SUBSTRING(CustomerID,1,4) AS ID_NUMBER "
@@ -96,10 +104,16 @@ spark.sql("SELECT CustomerID AS CUST_ID, CASE "
           "END CUST_CATEGORY "
           " FROM Telco_Spark").show()
 
-spark.sql("SELECT * FROM (SELECT CustomerID AS CUST_ID, CASE "
-          "WHEN CustomerID LIKE '1%' THEN 'Ones' "
-          "WHEN CustomerID LIKE '5%' THEN 'Fives' "
-          "WHEN CustomerID LIKE '9%' THEN 'Nines' "
-          "ELSE 'Uncategorized' "
+# Inner and outer queries, case when, inner join with another DF
+
+spark.sql("SELECT * FROM (SELECT CustomerID AS CUST_ID, "
+          "CASE "
+            "WHEN CustomerID LIKE '1%' THEN 'Ones' "
+            "WHEN CustomerID LIKE '5%' THEN 'Fives' "
+            "WHEN CustomerID LIKE '9%' THEN 'Nines' "
+            "ELSE 'Uncategorized' "
           "END CUST_CATEGORY "
-          " FROM Telco_Spark) a WHERE CUST_CATEGORY NOT LIKE 'Uncategorized'").show()
+          "FROM Telco_Spark) a "
+          "INNER JOIN DF_B_Spark b ON a.CUST_ID=b.CustomerID "
+          "WHERE CUST_CATEGORY NOT LIKE 'Uncategorized' "
+          "ORDER BY CUST_ID ASC").show()
