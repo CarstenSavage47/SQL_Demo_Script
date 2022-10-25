@@ -128,3 +128,7 @@ spark.sql("SELECT *, "
           "AVG(total_order_cost) OVER (ORDER BY ORDER_DATE "
           "ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS MOVING_AVERAGE "
           "FROM Meta_Spark").show()
+
+spark.sql("SELECT *, "
+          "TOTAL_ORDER_COST-LAG(TOTAL_ORDER_COST, 1) OVER (ORDER BY ORDER_DATE ASC) AS ORDER_CHANGE "
+          "FROM Meta_Spark").show()
