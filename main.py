@@ -133,6 +133,9 @@ spark.sql("SELECT *, "
           "TOTAL_ORDER_COST-LAG(TOTAL_ORDER_COST, 1) OVER (ORDER BY ORDER_DATE ASC) AS ORDER_CHANGE "
           "FROM Meta_Spark").show()
 
+spark.sql("SELECT *, "
+          "AVG(TOTAL_ORDER_COST) OVER (PARTITION BY CUST_ID) AS AVG_BY_CUST "
+          "FROM Meta_Spark").show()
 
 
 
