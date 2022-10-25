@@ -132,3 +132,18 @@ spark.sql("SELECT *, "
 spark.sql("SELECT *, "
           "TOTAL_ORDER_COST-LAG(TOTAL_ORDER_COST, 1) OVER (ORDER BY ORDER_DATE ASC) AS ORDER_CHANGE "
           "FROM Meta_Spark").show()
+
+
+
+
+PEI = pandas.read_csv("/Users/carstenjuliansavage/Desktop/R Working Directory/Useful Datasets/PEIDaily.csv")
+
+PEI_Spark = spark.createDataFrame(PEI)
+PEI_Spark.show()
+PEI_Spark.createOrReplaceTempView("PEI_Spark")
+
+spark.sql("SELECT *,"
+          "AVG(Close) OVER (ORDER BY DATE ASC ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS 3DAY, "
+          "AVG(Close) OVER (ORDER BY DATE ASC ROWS BETWEEN 29 PRECEDING AND CURRENT ROW) AS 30DAY "
+          "FROM PEI_Spark").show()
+
