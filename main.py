@@ -116,3 +116,15 @@ spark.sql("SELECT * FROM (SELECT CustomerID AS CUST_ID, "
           "INNER JOIN DF_B_Spark b ON a.CUST_ID=b.CustomerID "
           "WHERE CUST_CATEGORY NOT LIKE 'Uncategorized' "
           "ORDER BY CUST_ID ASC").show()
+
+Meta_Customer_Revenue = pandas.read_excel('/Users/carstenjuliansavage/Desktop/R Working Directory/Useful Datasets/Meta_Customer_Revenue.xlsx')
+Meta_Spark = spark.createDataFrame(Meta_Customer_Revenue)
+Meta_Spark.show()
+
+# Create referenceable tables
+Meta_Spark.createOrReplaceTempView("Meta_Spark")
+
+spark.sql("SELECT *, "
+          "AVG(total_order_cost) OVER (ORDER BY ORDER_DATE "
+          "ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS MOVING_AVERAGE "
+          "FROM Meta_Spark").show()
