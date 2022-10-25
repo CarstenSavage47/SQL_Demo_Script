@@ -137,6 +137,13 @@ spark.sql("SELECT *, "
           "AVG(TOTAL_ORDER_COST) OVER (PARTITION BY CUST_ID) AS AVG_BY_CUST "
           "FROM Meta_Spark").show()
 
+spark.sql("SELECT *, "
+          "CASE "
+          "WHEN TOTAL_ORDER_COST > 30 THEN 'HIGH PRICE'"
+          "WHEN TOTAL_ORDER_COST <= 30 THEN 'LOW PRICE' "
+          "ELSE 'N/A'"
+          "END PRICE_IND "
+          "FROM Meta_Spark").show()
 
 
 PEI = pandas.read_csv("/Users/carstenjuliansavage/Desktop/R Working Directory/Useful Datasets/PEIDaily.csv")
@@ -149,4 +156,3 @@ spark.sql("SELECT *,"
           "AVG(Close) OVER (ORDER BY DATE ASC ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS 3DAY, "
           "AVG(Close) OVER (ORDER BY DATE ASC ROWS BETWEEN 29 PRECEDING AND CURRENT ROW) AS 30DAY "
           "FROM PEI_Spark").show()
-
